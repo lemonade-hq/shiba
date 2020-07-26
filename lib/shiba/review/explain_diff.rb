@@ -19,7 +19,7 @@ module Shiba
       end
 
       def diff_requested_by_user?
-        [ "staged", "unstaged", "branch", "diff" ].any? { |key| @options.key?(key) }
+        ENV['SHIBA_GITHUB_TOKEN'] && [ "staged", "unstaged", "branch", "diff" ].any? { |key| @options.key?(key) }
       end
 
       # Returns detected problem queries with their line numbers.
