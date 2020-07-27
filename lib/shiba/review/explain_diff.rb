@@ -19,6 +19,7 @@ module Shiba
       end
 
       def diff_requested_by_user?
+        return false
         ENV['SHIBA_GITHUB_TOKEN'] && [ "staged", "unstaged", "branch", "diff" ].any? { |key| @options.key?(key) }
       end
 
