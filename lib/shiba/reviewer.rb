@@ -44,6 +44,7 @@ module Shiba
 
         { body: renderer.render(explain),
           commit_id: @commit_id,
+          backtrace: explain["backtrace"],
           path: file,
           line: line_number,
           position: position }

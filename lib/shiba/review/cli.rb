@@ -91,6 +91,10 @@ module Shiba
 
 
           problems.each { |_,problem| @out.puts JSON.dump(problem) }
+          reviewer = Shiba::Reviewer.new(nil, problems, options)
+          File.open('/tmp/shiba/query-log-results.json', 'a') do |f|
+            f.write(JSON.dump(reviewer.comments))
+          end
           return 2
         end
 
