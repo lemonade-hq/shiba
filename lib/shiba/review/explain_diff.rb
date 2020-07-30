@@ -62,7 +62,7 @@ module Shiba
           return Result.new(:pass, msg)
         end
 
-        return Result.new(:fail, "Potential problems")
+        return Result.new(:pass, "Potential problems")
       end
 
       protected
