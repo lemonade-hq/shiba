@@ -92,7 +92,7 @@ module Shiba
 
 
           problems.each { |_,problem| @out.puts JSON.dump(problem) }
-          return 2
+          return 0
         end
 
         # Generate comments for the problem queries
@@ -127,7 +127,7 @@ module Shiba
           reviewer.submit
         end
 
-        return 2
+        return 0
       end
 
       def options
