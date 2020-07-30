@@ -19,7 +19,7 @@ module Shiba
       end
 
       def diff_requested_by_user?
-        [ "staged", "unstaged", "branch", "diff" ].any? { |key| @options.key?(key) }
+        !@options[ "raw" ] && [ "staged", "unstaged", "branch", "diff" ].any? { |key| @options.key?(key) }
       end
 
       # Returns detected problem queries with their line numbers.
@@ -70,8 +70,8 @@ module Shiba
       # file.rb:32:in `hello'",
       LINE_NUMBER_PATTERN = /:(\d+):/
 
-      def diff_line_from_backtrace(backtrace)
-        backtrace.each do |bl|
+      def diff_line_from_backtrace(trace)
+        trace.each do |bl|
           updated_lines.each do |path, lines|
             next if !bl.start_with?(path)
             bl =~ LINE_NUMBER_PATTERN
@@ -87,7 +87,7 @@ module Shiba
       # All explains from the log file with a backtrace that contains a changed file.
       def explains_with_backtrace_in_diff
         patterns = changed_files.map { |path| "-e #{path}" }.join(" ")
-        cmd = "grep #{@log} #{patterns}"
+        cmd = "grep #{patterns} #{@log}"
         $stderr.puts cmd if options["verbose"]
 
         json_lines = `#{cmd}`

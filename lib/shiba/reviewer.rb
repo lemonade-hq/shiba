@@ -59,13 +59,17 @@ module Shiba
         previous_reviews = api.previous_comments.map { |c| c['body'] }
 
         comments[0,10].each do |c|
-          if previous_reviews.any? { |r| r == c[:body] }
-            report("skipped duplicate comment")
-            next
-          end
+          # removed bc not accurate enough
+          # if previous_reviews.any? { |r| r == c[:body] }
+          #   report("skipped duplicate comment")
+          #   next
+          # end
 
           # :line isn't part of the github api
-          comment = c.dup.tap { |dc| dc.delete(:line) }
+          comment = c.dup.tap do |dc|
+            dc[:line] = dc.fetch(:line).to_i
+            dc.delete(:position)
+          end
           if options[:verbose]
             comment[:body] += " (verbose mode ts=#{Time.now.to_i})"
           end
