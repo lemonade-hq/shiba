@@ -41,6 +41,7 @@ module Shiba
       # Generates the review, returning an exit status code.
       # Prints to @out / @err, which default to STDOUT/STDERR.
       def run
+        return 0 if ENV['CIRCLE_BRANCH'] == 'master'
         report_options("diff", "branch", "pull_request")
 
         if !valid?
