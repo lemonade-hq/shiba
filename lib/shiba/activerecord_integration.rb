@@ -103,14 +103,17 @@ module Shiba
 
     def self.run_explain(file, path)
       file.close
-      correct_file
 
       cmd = "shiba explain #{database_args} --file #{path}"
       if ENV['SHIBA_QUERY_LOG_NAME']
-        cmd << " --json #{File.join(Shiba.path, "#{ENV["SHIBA_QUERY_LOG_NAME"]}.json")}"
+        path = File.join(Shiba.path, "#{ENV['SHIBA_QUERY_LOG_NAME']}.json")
+        cmd << " --json #{path}"
       elsif Shiba::Configure.ci?
-        cmd << " --json #{File.join(Shiba.path, 'ci.json')}"
+        path = File.join(Shiba.path, 'ci.json')
+        cmd << " --json #{path}"
       end
+
+      correct_file(path)
 
       if ENV['SHIBA_DEBUG']
         $stderr.puts("running:")
@@ -124,9 +127,7 @@ module Shiba
       connection_options.reject { |k,v| v.nil? || v.respond_to?(:empty?) && v.empty? }.map { |k,v| "--#{k} #{v}" }.join(" ")
     end
 
-    def self.correct_file
-      path = log_path
-
+    def self.correct_file(path)
       result = ''
       File.readlines(path).each do |line|
         split = line.chomp.split('*/')
