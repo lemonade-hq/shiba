@@ -103,7 +103,7 @@ module Shiba
 
     def self.run_explain(file, path)
       file.close
-      correct_file
+      correct_file(path)
 
       cmd = "shiba explain #{database_args} --file #{path}"
       if ENV['SHIBA_QUERY_LOG_NAME']
@@ -124,9 +124,7 @@ module Shiba
       connection_options.reject { |k,v| v.nil? || v.respond_to?(:empty?) && v.empty? }.map { |k,v| "--#{k} #{v}" }.join(" ")
     end
 
-    def self.correct_file
-      path = log_path
-
+    def self.correct_file(path)
       result = ''
       File.readlines(path).each do |line|
         split = line.chomp.split('*/')
