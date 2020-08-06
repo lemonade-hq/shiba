@@ -86,7 +86,7 @@ module Shiba
 
       # All explains from the log file with a backtrace that contains a changed file.
       def explains_with_backtrace_in_diff
-        patterns = changed_files.map { |path| "-e #{path}" }.join(" ")
+        patterns = changed_files.map { |path| "-e '#{path}'" }.join(" ")
         cmd = "grep #{patterns} #{@log}"
         $stderr.puts cmd if options["verbose"]
 
