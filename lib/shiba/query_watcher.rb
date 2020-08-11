@@ -17,8 +17,9 @@ module Shiba
       sql = payload[:sql]
       return if !sql.start_with?("SELECT")
 
-      if sql.include?("$1")
-        sql = interpolate(sql, payload[:type_casted_binds])
+      if postgres? && sql.include?("$1")
+        type_casted_binds = payload[:type_casted_binds]
+        sql = interpolate(sql, type_casted_binds)
       end
 
       sql = sql.gsub(/\n/, ' ')
@@ -38,6 +39,10 @@ module Shiba
         sql = sql.sub("$#{i +1}", ActiveRecord::Base.connection.quote(val))
       end
       sql
+    end
+
+    def postgres?
+      Shiba::ActiveRecordIntegration.connection_options.fetch('server', nil) != 'mysql'
     end
   end
 end
